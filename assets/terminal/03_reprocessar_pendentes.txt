@@ -1,0 +1,28 @@
+12:18:25 INFO    inicio        execução 'reprocessar' iniciada
+12:18:25 INFO    visao         API de visão no ar (modelo best.pt, classes ['poste_aceso', 'poste_apagado'])
+12:18:25 INFO    reprocesso    1 relato(s) pendente(s) da visão
+12:18:26 INFO    visao         [R-2002] veredito=confirmado cena=noite conf_apagado=0.90 (1423 ms) — 2 poste(s) apagado(s) com confiança ≥ 0.5
+12:18:26 INFO    poste         [R-2002] poste IP0300818 (AVENIDA SOUZA RAMOS, LED) a 5.0 m [geosampa_wfs]
+12:18:27 INFO    solicitacao   [R-2002] agrupado na solicitação existente (deduplicado) RA-2026-000003 — prioridade alta (71) com 2 relato(s)
+12:18:27 INFO    notificacao   [R-2002] mensagem ao cidadão colocada na outbox
+12:18:27 INFO    exportacao    5 arquivo(s) atualizados em saida/
+12:18:27 INFO    fim           concluida: lidos=0 sucessos=1 invalidos=0 duplicados=0 confirmados=1 nao_confirmados=0 inconclusivos=0 robo=0 novas=0 reforcadas=1 pendentes_visao=0 reprocessados=1 falhas=0
+
+=== Resumo da execução 20261108-121825-a802 ===
+  status                   concluida
+  lidos                    0
+  sucessos                 1
+  invalidos                0
+  duplicados               0
+  confirmados              1
+  nao_confirmados          0
+  inconclusivos            0
+  rejeitados_visao         0
+  leituras_robo            0
+  solicitacoes_novas       0
+  solicitacoes_reforcadas  1
+  pendentes_visao          0
+  reprocessados_ok         1
+  falhas_inesperadas       0
+  restantes_na_fila        0
+  fotos_removidas_lgpd     0

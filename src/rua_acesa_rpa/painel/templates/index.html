@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rua Acesa · Revisão</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --ink: #14181f; --muted: #555d6b; --line: #dde1e7;
+    --accent: #b8860b; --alta: #b42318; --media: #b54708; --baixa: #3b6e2f;
+    --ok: #1d6f42; --info: #1f4f99; --warn-bg: #fff4e5;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+  header { background: #101418; color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  header h1 { font-size: 19px; margin: 0; }
+  header .lamp { width: 14px; height: 14px; border-radius: 50%; background: #ffcc33; box-shadow: 0 0 12px #ffcc33; }
+  header nav { margin-left: auto; display: flex; gap: 14px; }
+  header nav a { color: #e7e9ee; text-decoration: none; }
+  header nav a:hover, header nav a:focus { text-decoration: underline; }
+  main { max-width: 1180px; margin: 0 auto; padding: 18px 16px 60px; }
+  h2 { font-size: 18px; margin: 28px 0 10px; }
+  .aviso { padding: 10px 14px; border-radius: 8px; margin: 10px 0; }
+  .aviso.ok { background: #e7f6ec; color: var(--ok); }
+  .aviso.erro { background: #fdecea; color: var(--alta); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .kpi b { display: block; font-size: 24px; }
+  .kpi span { color: var(--muted); font-size: 13px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .card-top h3 { margin: 0; font-size: 17px; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: #fff; }
+  .alta { background: var(--alta); } .media { background: var(--media); } .baixa { background: var(--baixa); }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; border: 1px solid var(--line); background: #f1f3f6; }
+  .chip.inconclusiva, .chip.sensor { background: var(--warn-bg); border-color: #f5c27a; }
+  .chip.reparo { background: #e7f6ec; border-color: #9fd3b1; }
+  .meta { color: var(--muted); font-size: 13.5px; margin: 6px 0 10px; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } header nav { margin-left: 0; } }
+  .relatos { display: flex; flex-wrap: wrap; gap: 10px; }
+  figure { margin: 0; width: 170px; }
+  figure img { width: 170px; height: 128px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: #222; }
+  figcaption { font-size: 12.5px; color: var(--muted); }
+  .robo { width: 170px; height: 128px; border-radius: 8px; border: 1px dashed #9aa3b0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 13px; padding: 6px; }
+  .robo b { font-size: 20px; }
+  ul.motivos { margin: 6px 0; padding-left: 18px; font-size: 13.5px; }
+  pre { white-space: pre-wrap; background: #f6f7f9; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 13px; margin: 6px 0; }
+  form.acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; }
+  label { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 3px; }
+  input[type=text] { font: inherit; padding: 6px 9px; border: 1px solid #b9c0ca; border-radius: 7px; min-width: 170px; }
+  button { font: inherit; font-weight: 600; padding: 7px 14px; border-radius: 7px; border: 1px solid transparent; cursor: pointer; }
+  button.aprovar { background: var(--ok); color: #fff; }
+  button.rejeitar { background: #fff; color: var(--alta); border-color: var(--alta); }
+  button.resolver { background: var(--info); color: #fff; }
+  button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #ffbf47; outline-offset: 2px; }
+  #mapa { height: 380px; border-radius: 12px; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 13.5px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #eef0f4; }
+  .nivel-WARN { color: var(--media); font-weight: 600; } .nivel-ERROR { color: var(--alta); font-weight: 700; }
+  .vazio { color: var(--muted); font-style: italic; }
+  .scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<header>
+  <span class="lamp" aria-hidden="true"></span>
+  <h1>Rua Acesa · Painel de revisão</h1>
+  <nav aria-label="Seções">
+    <a href="#fila">Fila ({{ fila|length }})</a>
+    <a href="#enviadas">Enviadas ({{ enviadas|length }})</a>
+    <a href="#mapa-sec">Mapa</a>
+    <a href="#execucoes">Execuções do robô</a>
+  </nav>
+</header>
+<main>
+  {% if msg %}<p class="aviso ok" role="status">✓ {{ msg }}</p>{% endif %}
+  {% if erro %}<p class="aviso erro" role="alert">✗ {{ erro }}</p>{% endif %}
+
+  <section aria-labelledby="ind-t">
+    <h2 id="ind-t">Indicadores</h2>
+    <div class="kpis">
+      <div class="kpi"><b>{{ ind.pontos_escuros_ativos }}</b><span>pontos escuros ativos</span></div>
+      <div class="kpi"><b>{{ ind.aguardando_revisao }}</b><span>aguardando revisão</span></div>
+      <div class="kpi"><b>{{ ind.enviadas_prefeitura }}</b><span>enviadas à Prefeitura</span></div>
+      <div class="kpi"><b>{{ ind.relatos_confirmados_ia_pct if ind.relatos_confirmados_ia_pct is not none else "—" }}{% if ind.relatos_confirmados_ia_pct is not none %}%{% endif %}</b><span>relatos confirmados pela IA</span></div>
+      <div class="kpi"><b>{{ ind.duplicados_evitados }}</b><span>duplicados evitados</span></div>
+      <div class="kpi"><b>{{ ind.tempo_medio_relato_reparo_h if ind.tempo_medio_relato_reparo_h is not none else "—" }}{% if ind.tempo_medio_relato_reparo_h is not none %} h{% endif %}</b><span>tempo médio relato → reparo</span></div>
+    </div>
+  </section>
+
+  <section id="fila" aria-labelledby="fila-t">
+    <h2 id="fila-t">Fila de revisão — maior prioridade primeiro</h2>
+    <p class="meta">A IA sugere; a decisão de enviar à Prefeitura é sua. Itens sinalizados (inconclusiva / só sensor) pedem atenção redobrada.</p>
+    {% for s in fila %}
+    <article class="card" aria-labelledby="sol-{{ s.id }}">
+      <div class="card-top">
+        <h3 id="sol-{{ s.id }}">{{ s.protocolo }}</h3>
+        <span class="badge {{ s.prioridade_faixa }}">prioridade {{ s.prioridade_faixa }} · {{ s.prioridade_score }}</span>
+        <span class="chip {{ s.evidencia }}">{% if s.evidencia == 'confirmada' %}confirmada pela IA{% elif s.evidencia == 'sensor' %}⚠ só sensor do robô{% else %}⚠ inconclusiva{% endif %}</span>
+        {% if s.corroborado_robo %}<span class="chip">robô mediu escuro</span>{% endif %}
+        {% if s.indicio_reparo %}<span class="chip reparo">indício de reparo (robô)</span>{% endif %}
+      </div>
+      <p class="meta">
+        {% if s.poste_placa %}Poste <b>{{ s.poste_placa }}</b> · {{ s.poste_endereco or "endereço não informado" }} · {{ s.poste_tipo or "" }} (GeoSampa){% else %}Sem poste cadastrado no raio{% endif %}
+        · {{ s.qtd_relatos }} relato(s) · <a href="https://www.openstreetmap.org/?mlat={{ s.latitude }}&mlon={{ s.longitude }}#map=19/{{ s.latitude }}/{{ s.longitude }}" target="_blank" rel="noopener">ver no mapa</a>
+      </p>
+      <div class="grid">
+        <div>
+          <div class="relatos">
+          {% for r in s.relatos %}
+            {% if r.origem == 'cidadao' %}
+            <figure>
+              {% if r.foto_arquivo %}<img src="/fotos/{{ r.id }}" alt="Foto do relato {{ r.id }}: veredito da IA {{ r.veredito }}" loading="lazy">{% else %}<div class="robo">foto removida (retenção LGPD)</div>{% endif %}
+              <figcaption>{{ r.id }} · <b>{{ r.veredito or r.status }}</b>{% if r.confianca_apagado %} · {{ "%.0f"|format(r.confianca_apagado * 100) }}%{% endif %} · {{ r.cena or "" }}</figcaption>
+            </figure>
+            {% else %}
+            <figure>
+              <div class="robo"><span>Robô {{ r.dispositivo_id }}</span><b>{{ "%.1f"|format(r.leitura_lux) }} lux</b><span>{{ r.classificacao_rpa }}</span></div>
+              <figcaption>{{ r.id }} · leitura LDR</figcaption>
+            </figure>
+            {% endif %}
+          {% endfor %}
+          </div>
+          <p class="meta" style="margin-top:10px"><b>Por que esta prioridade:</b></p>
+          <ul class="motivos">{% for m in s.motivos %}<li>{{ m }}</li>{% endfor %}</ul>
+        </div>
+        <div>
+          <p class="meta" style="margin:0"><b>Texto da solicitação (SP156)</b></p>
+          <pre>{{ s.texto }}</pre>
+        </div>
+      </div>
+      <form class="acoes" method="post" action="/solicitacoes/{{ s.id }}/aprovar">
+        <label>Revisor(a)<input type="text" name="revisor" required maxlength="60" autocomplete="name"></label>
+        <button class="aprovar" type="submit">Aprovar e enviar à Prefeitura</button>
+        <label>Motivo da rejeição<input type="text" name="motivo" maxlength="300" placeholder="ex.: foto não mostra o poste"></label>
+        <button class="rejeitar" type="submit" formaction="/solicitacoes/{{ s.id }}/rejeitar">Rejeitar</button>
+      </form>
+    </article>
+    {% else %}
+    <p class="vazio">Nenhuma solicitação aguardando revisão.</p>
+    {% endfor %}
+  </section>
+
+  <section id="enviadas" aria-labelledby="env-t">
+    <h2 id="env-t">Enviadas à Prefeitura</h2>
+    {% for s in enviadas %}
+    <article class="card">
+      <div class="card-top">
+        <h3>{{ s.protocolo }}</h3>
+        <span class="badge {{ s.prioridade_faixa }}">{{ s.prioridade_faixa }} · {{ s.prioridade_score }}</span>
+        {% if s.indicio_reparo %}<span class="chip reparo">robô mediu iluminação adequada — provável reparo</span>{% endif %}
+      </div>
+      <p class="meta">{{ s.poste_placa or "sem poste" }} · {{ s.poste_endereco or "" }} · aprovada por {{ s.revisado_por }} em {{ s.revisado_em }}</p>
+      <form class="acoes" method="post" action="/solicitacoes/{{ s.id }}/resolver">
+        <label>Revisor(a)<input type="text" name="revisor" required maxlength="60"></label>
+        <button class="resolver" type="submit">Marcar como resolvida (poste religado)</button>
+      </form>
+    </article>
+    {% else %}
+    <p class="vazio">Nenhuma solicitação enviada aguardando reparo.</p>
+    {% endfor %}
+    {% if encerradas %}
+    <details><summary>Encerradas recentemente ({{ encerradas|length }})</summary>
+      <div class="scroll"><table><thead><tr><th>Protocolo</th><th>Status</th><th>Poste</th><th>Revisor(a)</th><th>Motivo</th></tr></thead><tbody>
+      {% for s in encerradas %}<tr><td>{{ s.protocolo }}</td><td>{{ s.status }}</td><td>{{ s.poste_placa or "—" }}</td><td>{{ s.revisado_por or "—" }}</td><td>{{ s.motivo_revisao or "" }}</td></tr>{% endfor %}
+      </tbody></table></div>
+    </details>
+    {% endif %}
+  </section>
+
+  <section id="mapa-sec" aria-labelledby="mapa-t">
+    <h2 id="mapa-t">Onde a cidade está escura</h2>
+    <div id="mapa" role="region" aria-label="Mapa das solicitações abertas"></div>
+    <p class="meta">Pontos = solicitações abertas (cor = prioridade). Fonte dos postes: GeoSampa / ILUME. Mapa © OpenStreetMap.</p>
+  </section>
+
+  <section id="execucoes" aria-labelledby="exec-t">
+    <h2 id="exec-t">Execuções do robô</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Início</th><th>Tipo</th><th>Status</th><th>Lidos</th><th>Sucessos</th><th>Inválidos</th><th>Duplicados</th><th>Pendentes visão</th><th>Falhas</th></tr></thead>
+      <tbody>
+      {% for e in execucoes %}
+        <tr><td>{{ e.inicio }}</td><td>{{ e.tipo }}</td><td>{{ e.status }}</td><td>{{ e.resumo.lidos }}</td><td>{{ e.resumo.sucessos }}</td><td>{{ e.resumo.invalidos }}</td><td>{{ e.resumo.duplicados }}</td><td>{{ e.resumo.pendentes_visao }}</td><td>{{ e.resumo.falhas_inesperadas }}</td></tr>
+      {% else %}<tr><td colspan="9" class="vazio">Nenhuma execução ainda.</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+    <h2>Trilha de auditoria (últimos eventos)</h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Quando</th><th>Execução</th><th>Nível</th><th>Etapa</th><th>Relato</th><th>Mensagem</th></tr></thead>
+      <tbody>
+      {% for ev in eventos %}
+        <tr><td>{{ ev.ts[11:19] }}</td><td>{{ ev.run_id }}</td><td class="nivel-{{ ev.nivel }}">{{ ev.nivel }}</td><td>{{ ev.etapa }}</td><td>{{ ev.relato_id or "" }}</td><td>{{ ev.mensagem }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  </section>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  (function () {
+    if (!window.L) { document.getElementById("mapa").textContent = "Mapa indisponível sem internet."; return; }
+    const cores = { alta: "#b42318", media: "#b54708", baixa: "#3b6e2f" };
+    const mapa = L.map("mapa").setView([-23.6, -46.6], 11);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(mapa);
+    fetch("/api/pontos").then(r => r.json()).then(geo => {
+      const camada = L.geoJSON(geo, {
+        pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 9, color: "#111", weight: 1, fillColor: cores[f.properties.prioridade_faixa] || "#666", fillOpacity: 0.9 }),
+        onEachFeature: (f, layer) => {
+          const p = f.properties;
+          const div = document.createElement("div");
+          div.innerHTML = "<b></b><br><span></span><br><small></small>";
+          div.querySelector("b").textContent = p.protocolo + " · " + p.prioridade_faixa + " (" + p.prioridade_score + ")";
+          div.querySelector("span").textContent = (p.poste_placa || "sem poste") + " · " + (p.poste_endereco || "");
+          div.querySelector("small").textContent = p.status + " · " + p.qtd_relatos + " relato(s) · evidência " + p.evidencia;
+          layer.bindPopup(div);
+        }
+      }).addTo(mapa);
+      if (geo.features.length) mapa.fitBounds(camada.getBounds().pad(0.3));
+    });
+  })();
+</script>
+</body>
+</html>

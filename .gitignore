@@ -1,0 +1,25 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# estado de execução local (gerado pelo robô)
+dados/*.db
+dados/*.db-*
+dados/.salt
+dados/fotos/
+entrada/*
+!entrada/.gitkeep
+processados/
+erros/
+saida/*
+!saida/.gitkeep
+logs/*
+!logs/.gitkeep
+!logs/amostras/
+
+# material de referência da equipe (fora do repositório)
+Desafio-FIAP-GS-CitizenTech 4ES.pdf
+Rua Acesa — Ficha Técnica do MVP.md

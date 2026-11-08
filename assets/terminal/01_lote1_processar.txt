@@ -1,0 +1,66 @@
+12:17:39 INFO    inicio        execução 'processar' iniciada
+12:17:39 INFO    visao         API de visão no ar (modelo best.pt, classes ['poste_aceso', 'poste_apagado'])
+12:17:39 INFO    lote          14 relato(s) no lote
+12:17:39 INFO    recebido      [R-1001] relato de cidadao em (-23.561, -46.657) com contato (pseudonimizado)
+12:17:39 INFO    visao         [R-1001] veredito=confirmado cena=noite conf_apagado=0.91 (28 ms) — 1 poste(s) apagado(s) com confiança ≥ 0.5
+12:17:39 INFO    poste         [R-1001] poste IP0520122 (AVENIDA PAULISTA, LED) a 3.6 m [geosampa_wfs]
+12:17:39 INFO    solicitacao   [R-1001] nova solicitação RA-2026-000001 — prioridade media (65) com 1 relato(s)
+12:17:39 INFO    notificacao   [R-1001] mensagem ao cidadão colocada na outbox
+12:17:39 INFO    recebido      [R-1002] relato de cidadao em (-23.561, -46.657)
+12:17:39 INFO    visao         [R-1002] veredito=confirmado cena=noite conf_apagado=0.90 (6 ms) — 1 poste(s) apagado(s) com confiança ≥ 0.5
+12:17:39 INFO    poste         [R-1002] poste IP0520122 (AVENIDA PAULISTA, LED) a 3.7 m [geosampa_wfs]
+12:17:39 INFO    solicitacao   [R-1002] agrupado na solicitação existente (deduplicado) RA-2026-000001 — prioridade alta (71) com 2 relato(s)
+12:17:39 INFO    recebido      [R-1003] relato de robo em (-23.561, -46.657)
+12:17:39 INFO    robo          [R-1003] leitura 2.1 lux => escuro
+12:17:39 INFO    poste         [R-1003] poste IP0520122 (AVENIDA PAULISTA, LED) a 1.4 m [geosampa_wfs]
+12:17:39 INFO    solicitacao   [R-1003] agrupado na solicitação existente (deduplicado) RA-2026-000001 — prioridade alta (86) com 3 relato(s)
+12:17:39 INFO    recebido      [R-1004] relato de cidadao em (-23.562, -46.658) com contato (pseudonimizado)
+12:17:39 INFO    visao         [R-1004] veredito=nao_confirmado cena=noite conf_apagado=0.00 (7 ms) — apenas poste(s) aceso(s) detectado(s) com confiança ≥ 0.5
+12:17:39 INFO    notificacao   [R-1004] mensagem ao cidadão colocada na outbox
+12:17:39 INFO    decisao       [R-1004] arquivado: IA viu apenas poste(s) aceso(s)
+12:17:39 INFO    recebido      [R-1005] relato de cidadao em (-23.668, -46.776) com contato (pseudonimizado)
+12:17:39 INFO    visao         [R-1005] veredito=inconclusivo cena=dia conf_apagado=0.91 (6 ms) — foto diurna: poste desligado de dia é esperado; reenviar foto à noite
+12:17:39 INFO    notificacao   [R-1005] mensagem ao cidadão colocada na outbox
+12:17:39 INFO    decisao       [R-1005] inconclusivo: vai para a fila de revisão humana com sinalização
+12:17:39 INFO    poste         [R-1005] poste IP0064901 (TRAVESSA MUTIRANTE LUIZ GONZAGA, LED) a 5.6 m [geosampa_wfs]
+12:17:40 INFO    solicitacao   [R-1005] nova solicitação RA-2026-000002 — prioridade media (45) com 1 relato(s)
+12:17:40 INFO    recebido      [R-1006] relato de cidadao em (-23.581, -46.411)
+12:17:40 INFO    visao         [R-1006] veredito=confirmado cena=noite conf_apagado=0.90 (7 ms) — 2 poste(s) apagado(s) com confiança ≥ 0.5
+12:17:40 INFO    poste         [R-1006] poste IP0300818 (AVENIDA SOUZA RAMOS, LED) a 5.8 m [geosampa_wfs]
+12:17:40 INFO    solicitacao   [R-1006] nova solicitação RA-2026-000003 — prioridade media (65) com 1 relato(s)
+12:17:40 INFO    recebido      [R-1007] relato de robo em (-23.67, -46.78)
+12:17:40 INFO    robo          [R-1007] leitura 3.4 lux => escuro
+12:17:40 INFO    poste         [R-1007] poste IP0064941 (RUA DOS MUTIRANTES, LED) a 2.9 m [geosampa_wfs]
+12:17:40 INFO    solicitacao   [R-1007] nova solicitação RA-2026-000004 — prioridade media (50) com 1 relato(s)
+12:17:40 INFO    recebido      [R-1008] relato de robo em (-23.581, -46.411)
+12:17:40 WARNING robo          [R-1008] robô classificou 'adequado', limiares do RPA dão 'fraco' (9.0 lux) — vale a do RPA
+12:17:40 INFO    decisao       [R-1008] arquivado: iluminação fraca e nenhuma solicitação aberta no local
+12:17:40 INFO    recebido      [R-1009] relato de robo em (-23.563, -46.66)
+12:17:40 INFO    robo          [R-1009] leitura 32.0 lux => adequado
+12:17:40 INFO    decisao       [R-1009] arquivado: iluminação adequada e nenhuma solicitação aberta no local
+12:17:40 WARNING validacao     R-1010.json rejeitado: JSON inválido (linha 1, coluna 58): Expecting property name enclosed in double quotes
+12:17:40 WARNING validacao     R-1011.json rejeitado: foto 'R-1011.jpg' não encontrada ao lado do JSON
+12:17:40 WARNING validacao     R-1012.json rejeitado: coordenada (-22.907, -43.173) fora do município de São Paulo
+12:17:40 INFO    duplicado     [R-1013] mesma foto do relato R-1001
+12:17:40 WARNING validacao     R-1014.json rejeitado: campos inválidos — leitura.luminosidade_lux: Input should be greater than or equal to 0
+12:17:40 INFO    exportacao    5 arquivo(s) atualizados em saida/
+12:17:40 INFO    fim           concluida: lidos=14 sucessos=10 invalidos=4 duplicados=1 confirmados=3 nao_confirmados=1 inconclusivos=1 robo=4 novas=4 reforcadas=2 pendentes_visao=0 reprocessados=0 falhas=0
+
+=== Resumo da execução 20261108-121739-06f9 ===
+  status                   concluida
+  lidos                    14
+  sucessos                 10
+  invalidos                4
+  duplicados               1
+  confirmados              3
+  nao_confirmados          1
+  inconclusivos            1
+  rejeitados_visao         0
+  leituras_robo            4
+  solicitacoes_novas       4
+  solicitacoes_reforcadas  2
+  pendentes_visao          0
+  reprocessados_ok         0
+  falhas_inesperadas       0
+  restantes_na_fila        0
+  fotos_removidas_lgpd     0

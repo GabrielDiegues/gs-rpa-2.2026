@@ -1,0 +1,18 @@
+# Robô (núcleo)
+requests==2.34.2
+pydantic==2.14.3
+python-dotenv==1.2.4
+pillow==13.0.0
+
+# Painel de revisão humana
+fastapi==0.162.2
+uvicorn[standard]==0.54.0
+jinja2==3.1.6
+python-multipart==0.0.33
+
+# Testes
+pytest==9.2.0
+httpx==0.28.1
+
+# Instala o pacote src/rua_acesa_rpa em modo editável
+-e .

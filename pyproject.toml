@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rua-acesa-rpa"
+version = "1.0.0"
+description = "Rua Acesa — robô de automação (RPA) que valida, confirma, deduplica, prioriza e encaminha relatos de poste apagado."
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+rua_acesa_rpa = ["painel/templates/*.html", "painel/static/*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = ["integracao: chama a API de visão real (requer VISAO_URL no ar)"]
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient` is deprecated"]

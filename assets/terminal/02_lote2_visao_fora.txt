@@ -1,0 +1,33 @@
+12:18:06 INFO    inicio        execução 'processar' iniciada
+12:18:06 WARNING visao         API de visão não respondeu em http://localhost:8000/health; relatos de cidadão poderão ficar pendentes
+12:18:06 INFO    lote          3 relato(s) no lote
+12:18:06 INFO    duplicado     [R-1001] relato R-1001 já recebido em 2026-11-08T12:17:39-03:00 (status vinculado)
+12:18:06 INFO    recebido      [R-2001] relato de robo em (-23.561, -46.657)
+12:18:06 INFO    robo          [R-2001] leitura 28.5 lux => adequado
+12:18:06 INFO    decisao       [R-2001] indício de reparo: robô mediu iluminação adequada em RA-2026-000001
+12:18:06 INFO    recebido      [R-2002] relato de cidadao em (-23.581, -46.411) com contato (pseudonimizado)
+12:18:06 WARNING visao         tentativa 1 falhou: sem conexão com http://localhost:8000; nova tentativa em 1.0s
+12:18:07 WARNING visao         tentativa 2 falhou: sem conexão com http://localhost:8000; nova tentativa em 2.0s
+12:18:09 WARNING visao         [R-2002] visão indisponível (sem conexão com http://localhost:8000); relato fica pendente para a próxima execução
+12:18:09 INFO    exportacao    5 arquivo(s) atualizados em saida/
+12:18:09 INFO    fim           concluida: lidos=3 sucessos=2 invalidos=0 duplicados=1 confirmados=0 nao_confirmados=0 inconclusivos=0 robo=1 novas=0 reforcadas=0 pendentes_visao=1 reprocessados=0 falhas=0
+
+=== Resumo da execução 20261108-121806-079d ===
+  status                   concluida
+  lidos                    3
+  sucessos                 2
+  invalidos                0
+  duplicados               1
+  confirmados              0
+  nao_confirmados          0
+  inconclusivos            0
+  rejeitados_visao         0
+  leituras_robo            1
+  solicitacoes_novas       0
+  solicitacoes_reforcadas  0
+  pendentes_visao          1
+  reprocessados_ok         0
+  falhas_inesperadas       0
+  restantes_na_fila        0
+  fotos_removidas_lgpd     0
+  AVISO: API de visão não respondeu em http://localhost:8000/health; relatos de cidadão poderão ficar pendentes

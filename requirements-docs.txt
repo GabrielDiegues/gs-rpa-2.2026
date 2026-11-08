@@ -1,0 +1,3 @@
+# Só para gerar docs/relatorio.pdf (scripts/build_report.py)
+markdown==3.11.3
+weasyprint==70.0
